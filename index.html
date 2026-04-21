@@ -417,6 +417,88 @@
   }
   .story-text p + p { margin-top: 1.25rem; }
 
+  /* PROOF / TESTIMONIAL GRID */
+  .proof { padding: 7rem 0; background: var(--cream); }
+  .proof-header { text-align: center; margin-bottom: 4rem; }
+  .proof-header .section-eyebrow { display: inline-block; }
+  .proof-header .section-title { max-width: 720px; margin: 0 auto; }
+  .proof-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-bottom: 3rem;
+  }
+  .proof-card {
+    background: var(--cream-warm);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 1.25rem;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    position: relative; overflow: hidden;
+  }
+  .proof-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -20px rgba(30, 58, 43, 0.2);
+    border-color: rgba(201, 87, 46, 0.3);
+  }
+  .proof-card-feature {
+    background: linear-gradient(135deg, #faf6ee 0%, #f2ebd9 100%);
+    border-color: rgba(201, 87, 46, 0.25);
+    box-shadow: 0 16px 40px -16px rgba(201, 87, 46, 0.2);
+  }
+  .proof-card-feature::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 87, 46, 0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .proof-stars {
+    color: #e6a83a; letter-spacing: 3px; font-size: 1rem;
+  }
+  .proof-quote {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem; line-height: 1.45;
+    color: var(--forest-deep);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    flex: 1;
+  }
+  .proof-meta {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .proof-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    color: var(--cream); font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; font-family: 'Fraunces', serif;
+    flex-shrink: 0;
+  }
+  .proof-name { font-weight: 600; font-size: 0.92rem; color: var(--forest-deep); }
+  .proof-source { font-size: 0.78rem; color: var(--olive); margin-top: 0.1rem; }
+  .proof-footer {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 2rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .proof-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.9rem; font-weight: 500;
+    color: var(--forest-deep); opacity: 0.85;
+  }
+  .proof-badge svg { stroke: var(--forest); }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
   /* SERVICE AREAS */
   .areas { padding: 6rem 0; background: var(--cream-warm); }
   .areas-inner {
@@ -794,22 +876,80 @@
         <div class="story-visual-quote">"</div>
         <div>
           <p style="font-family: 'Fraunces', serif; font-size: 1.5rem; font-style: italic; line-height: 1.35; margin-bottom: 2rem;">
-            These guys came out the same day I called, gave me a fair quote, and had a 40-foot oak down and the stump ground out by Tuesday. Best tree service I've dealt with in 20 years of homeownership.
+            Lightning struck my huge backyard tree on August 31st. Ramos Tree Service did a great job of removing the tree and grinding the stump. Definitely recommend them.
           </p>
           <div class="story-visual-caption">
-            <div class="story-visual-name">David M.</div>
-            <div class="story-visual-role">Alamo Heights · Verified Google Review</div>
+            <div class="story-visual-name">F. Vacek</div>
+            <div class="story-visual-role">San Antonio · Verified Google Review</div>
           </div>
         </div>
       </div>
 
       <div class="story-content">
         <div class="section-eyebrow">Our Story</div>
-        <h2 class="section-title">Ten years of taking tree work <span class="serif italic">seriously.</span></h2>
+        <h2 class="section-title">Frank Ramos runs the saw, and signs <span class="serif italic">every job.</span></h2>
         <div class="story-text">
-          <p>Ramos Tree Service started with a single truck, a chainsaw, and a belief that tree work in San Antonio was being done poorly by companies that cut corners.</p>
-          <p>A decade later, we've become the go-to crew for homeowners across Alamo Heights, Stone Oak, Terrell Hills, and the greater SA area — because we still show up on time, still do the job right, and still treat your yard like it's our own.</p>
+          <p>Ramos Tree Service is family-owned and operated out of San Antonio. Frank Ramos Jr. answers the phone, walks your property, writes the quote, and rolls the truck — no subcontractors, no middlemen, no surprises on the invoice.</p>
+          <p>That's why the crew has a perfect 5.0 rating across 26+ verified reviews, BBB accreditation, and a growing list of repeat customers across Alamo Heights, Stone Oak, Terrell Hills, and the rest of Bexar County.</p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="container">
+    <div class="proof-header reveal">
+      <div class="section-eyebrow">What Neighbors Are Saying</div>
+      <h2 class="section-title">5.0 across <span class="serif italic">26+ reviews.</span></h2>
+    </div>
+    <div class="proof-grid">
+      <article class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Professionalism and excellent customer care is what you can expect from Mr. Ramos Tree Service."</p>
+        <div class="proof-meta">
+          <div class="proof-avatar" style="background: #8b4513;">W</div>
+          <div>
+            <div class="proof-name">William Taylor</div>
+            <div class="proof-source">Google Review</div>
+          </div>
+        </div>
+      </article>
+      <article class="proof-card proof-card-feature reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Lightning struck my huge backyard tree. Ramos Tree Service did a great job of removing the tree and grinding the stump. Definitely recommend them."</p>
+        <div class="proof-meta">
+          <div class="proof-avatar" style="background: var(--terracotta);">F</div>
+          <div>
+            <div class="proof-name">F. Vacek</div>
+            <div class="proof-source">Google Review · Emergency removal</div>
+          </div>
+        </div>
+      </article>
+      <article class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Highly recommended — did a fantastic job and very respectful."</p>
+        <div class="proof-meta">
+          <div class="proof-avatar" style="background: var(--olive);">A</div>
+          <div>
+            <div class="proof-name">Adam Hernandez</div>
+            <div class="proof-source">Google Review</div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="proof-footer reveal">
+      <div class="proof-badge">
+        <svg viewBox="0 0 24 24" fill="#4285F4" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <span>5.0 on Google</span>
+      </div>
+      <div class="proof-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>BBB Accredited</span>
+      </div>
+      <div class="proof-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+        <span>Licensed · Insured · Bonded</span>
       </div>
     </div>
   </div>
