@@ -89,6 +89,25 @@
     position: relative;
     overflow: hidden;
   }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -10%; right: -10%;
+    width: 70vw; height: 120%;
+    background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=70');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.14;
+    filter: saturate(120%) hue-rotate(-8deg);
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse at 70% 40%, black 25%, transparent 75%);
+    mask-image: radial-gradient(ellipse at 70% 40%, black 25%, transparent 75%);
+    z-index: 0;
+  }
+  .hero .container { position: relative; z-index: 1; }
+  @media (max-width: 900px) {
+    .hero::before { width: 120vw; right: -60%; opacity: 0.1; }
+  }
   .hero-grid {
     display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: center;
   }
