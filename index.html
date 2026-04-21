@@ -129,6 +129,55 @@
   }
   .btn-secondary:hover { background: var(--forest); color: var(--cream); }
   .btn svg { width: 16px; height: 16px; }
+  .btn-text {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--forest); text-decoration: none; font-size: 0.92rem;
+    font-weight: 500; padding: 0.75rem 0.25rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-text svg { width: 15px; height: 15px; opacity: 0.8; }
+  .btn-text:hover { color: var(--terracotta); border-bottom-color: var(--terracotta); }
+
+  /* Border-beam glow on primary CTA */
+  .btn-beam { position: relative; overflow: hidden; isolation: isolate; }
+  .btn-beam::before {
+    content: ''; position: absolute; inset: -2px;
+    background: conic-gradient(from 0deg, transparent, rgba(250,246,238,0.8), transparent 30%);
+    animation: beam 4s linear infinite;
+    z-index: -1;
+    border-radius: 100px;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-beam::after {
+    content: ''; position: absolute; inset: 2px;
+    background: var(--terracotta); border-radius: 100px; z-index: -1;
+    transition: background 0.2s;
+  }
+  .btn-beam:hover::before { opacity: 1; }
+  .btn-beam:hover::after { background: var(--terracotta-deep); }
+  @keyframes beam { to { transform: rotate(360deg); } }
+
+  /* Hero trust chips */
+  .hero-trust-chips {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin-top: 2rem;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    background: rgba(30, 58, 43, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--forest-deep);
+  }
+  .chip-stars { color: #e6a83a; letter-spacing: 1px; font-size: 0.78rem; }
+  .chip-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--terracotta);
+    box-shadow: 0 0 0 3px rgba(201, 87, 46, 0.15);
+  }
 
   .hero-visual {
     position: relative;
@@ -226,6 +275,11 @@
     font-size: 3rem; font-weight: 500; letter-spacing: -0.03em;
     color: var(--terracotta);
     line-height: 1;
+  }
+  .trust-num-sup {
+    font-size: 1.2rem; vertical-align: super;
+    margin-left: 0.15rem; opacity: 0.85;
+    font-weight: 400;
   }
   .trust-label {
     font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -616,20 +670,20 @@
   <div class="container">
     <div class="trust-grid">
       <div class="trust-item">
-        <div class="trust-num">10+</div>
-        <div class="trust-label">Years in Business</div>
+        <div class="trust-num">26<span class="trust-num-sup">+</span></div>
+        <div class="trust-label">Verified 5-Star Reviews</div>
       </div>
       <div class="trust-item">
-        <div class="trust-num">30+</div>
-        <div class="trust-label">5-Star Reviews</div>
+        <div class="trust-num">2<span class="trust-num-sup">hr</span></div>
+        <div class="trust-label">Quote Response Time</div>
       </div>
       <div class="trust-item">
-        <div class="trust-num">48hr</div>
-        <div class="trust-label">Emergency Response</div>
+        <div class="trust-num">24<span class="trust-num-sup">/7</span></div>
+        <div class="trust-label">Storm Emergency Line</div>
       </div>
       <div class="trust-item">
-        <div class="trust-num">100%</div>
-        <div class="trust-label">Licensed & Insured</div>
+        <div class="trust-num">BBB<span class="trust-num-sup">★</span></div>
+        <div class="trust-label">Accredited · Licensed · Insured</div>
       </div>
     </div>
   </div>
