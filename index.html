@@ -36,15 +36,26 @@
 
   /* NAV */
   nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(250, 246, 238, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease,
+                border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  nav.is-scrolled {
+    background: rgba(250, 246, 238, 0.78);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom-color: var(--border);
+    box-shadow: 0 4px 24px -12px rgba(30, 58, 43, 0.15);
   }
   .nav-inner {
     display: flex; align-items: center; justify-content: space-between;
     padding: 1.25rem 2rem; max-width: 1280px; margin: 0 auto;
+    transition: padding 0.35s ease;
   }
+  nav.is-scrolled .nav-inner { padding-top: 0.9rem; padding-bottom: 0.9rem; }
+  body { padding-top: 5rem; }
   .logo {
     font-family: 'Fraunces', serif;
     font-size: 1.35rem;
@@ -74,7 +85,7 @@
 
   /* HERO */
   .hero {
-    padding: 4rem 0 6rem;
+    padding: 2rem 0 6rem;
     position: relative;
     overflow: hidden;
   }
@@ -634,6 +645,41 @@
     font-size: 0.8rem; opacity: 0.6;
   }
 
+  /* SCROLL TREE (signature scroll animation) */
+  #scroll-tree {
+    position: fixed;
+    top: 0; right: 0;
+    width: 14vw; max-width: 220px; min-width: 140px;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.5;
+  }
+  #scroll-tree svg { width: 100%; height: 100%; overflow: visible; }
+  #scroll-tree .trunk, #scroll-tree .branch {
+    fill: none; stroke: var(--forest);
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  #scroll-tree .trunk { stroke-width: 7; }
+  #scroll-tree .branch { stroke-width: 2.8; opacity: 0.85; }
+  #scroll-tree .leaf {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  #scroll-tree .leaf-terra { fill: var(--terracotta); }
+  #scroll-tree .leaf-olive { fill: var(--olive); }
+  #scroll-tree .leaf-forest { fill: var(--forest); }
+  @media (max-width: 900px) {
+    #scroll-tree { width: 80px; min-width: 60px; opacity: 0.28; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #scroll-tree { opacity: 0.18; }
+    #scroll-tree .trunk, #scroll-tree .branch { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+    #scroll-tree .leaf { opacity: 0.8; transform: none; }
+  }
+
   /* MOCKUP BANNER */
   .mockup-banner {
     position: fixed;
@@ -684,6 +730,49 @@
     </div>
   </div>
 </nav>
+
+<div id="scroll-tree" aria-hidden="true">
+  <svg viewBox="0 0 200 1000" preserveAspectRatio="xMidYMax meet">
+    <!-- Trunk: draws bottom -> top as you scroll -->
+    <path id="st-trunk" class="trunk"
+      d="M100 1000 C 98 900 102 820 100 740 S 96 640 100 560 C 104 480 96 420 100 340 S 98 240 100 160"/>
+    <!-- Branches: staggered reveal 0.25 -> 0.7 -->
+    <path class="branch" d="M100 620 C 70 600 50 580 30 560"/>
+    <path class="branch" d="M100 560 C 130 545 155 530 175 510"/>
+    <path class="branch" d="M100 480 C 75 460 55 435 35 410"/>
+    <path class="branch" d="M100 420 C 128 405 152 385 170 360"/>
+    <path class="branch" d="M100 340 C 80 320 65 295 48 265"/>
+    <path class="branch" d="M100 290 C 125 270 148 245 164 215"/>
+    <path class="branch" d="M100 230 C 85 210 75 185 65 155"/>
+    <path class="branch" d="M100 190 C 118 170 135 145 148 115"/>
+    <path class="branch" d="M100 160 C 100 135 100 110 100 80"/>
+    <!-- Leaves: bloom 0.5 -> 1.0 -->
+    <circle class="leaf leaf-olive"   cx="26"  cy="558" r="7"/>
+    <circle class="leaf leaf-forest"  cx="36"  cy="548" r="6"/>
+    <circle class="leaf leaf-terra"   cx="22"  cy="570" r="5"/>
+    <circle class="leaf leaf-olive"   cx="179" cy="508" r="7"/>
+    <circle class="leaf leaf-forest"  cx="168" cy="498" r="6"/>
+    <circle class="leaf leaf-terra"   cx="185" cy="520" r="5"/>
+    <circle class="leaf leaf-olive"   cx="30"  cy="406" r="7"/>
+    <circle class="leaf leaf-forest"  cx="42"  cy="398" r="6"/>
+    <circle class="leaf leaf-terra"   cx="175" cy="358" r="7"/>
+    <circle class="leaf leaf-olive"   cx="162" cy="348" r="6"/>
+    <circle class="leaf leaf-terra"   cx="44"  cy="262" r="6"/>
+    <circle class="leaf leaf-forest"  cx="56"  cy="252" r="5"/>
+    <circle class="leaf leaf-olive"   cx="168" cy="212" r="6"/>
+    <circle class="leaf leaf-terra"   cx="156" cy="200" r="5"/>
+    <circle class="leaf leaf-forest"  cx="61"  cy="152" r="6"/>
+    <circle class="leaf leaf-olive"   cx="72"  cy="140" r="5"/>
+    <circle class="leaf leaf-terra"   cx="152" cy="112" r="6"/>
+    <circle class="leaf leaf-olive"   cx="140" cy="100" r="5"/>
+    <circle class="leaf leaf-forest"  cx="95"  cy="76"  r="6"/>
+    <circle class="leaf leaf-terra"   cx="108" cy="70"  r="5"/>
+    <circle class="leaf leaf-olive"   cx="100" cy="58"  r="7"/>
+    <circle class="leaf leaf-terra"   cx="88"  cy="66"  r="4"/>
+    <circle class="leaf leaf-forest"  cx="114" cy="62"  r="4"/>
+    <circle class="leaf leaf-olive"   cx="96"  cy="46"  r="5"/>
+  </svg>
+</div>
 
 <section class="hero">
   <div class="container">
@@ -1058,6 +1147,71 @@
 </footer>
 
 <div class="mockup-banner">Preview mockup · Digital AI Ads</div>
+
+<script>
+(function() {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Glass-blur nav on scroll
+  var nav = document.querySelector('nav');
+  function onScroll() {
+    if (window.scrollY > 12) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+    updateTree();
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // IntersectionObserver scroll reveals
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e, i) {
+        if (e.isIntersecting) {
+          setTimeout(function(){ e.target.classList.add('is-visible'); }, i * 80);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  // Scroll-driven tree growth
+  var trunk = document.getElementById('st-trunk');
+  var branches = document.querySelectorAll('#scroll-tree .branch');
+  var leaves = document.querySelectorAll('#scroll-tree .leaf');
+  var trunkLen = trunk ? trunk.getTotalLength() : 0;
+  if (trunk) { trunk.style.strokeDasharray = trunkLen; trunk.style.strokeDashoffset = trunkLen; }
+  branches.forEach(function(b){
+    var l = b.getTotalLength();
+    b.style.strokeDasharray = l; b.style.strokeDashoffset = l;
+  });
+  function updateTree() {
+    if (!trunk || reduce) return;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    // trunk draws 0 -> 0.35
+    var tp = Math.min(1, p / 0.35);
+    trunk.style.strokeDashoffset = trunkLen * (1 - tp);
+    // branches draw 0.25 -> 0.7 staggered
+    branches.forEach(function(b, i) {
+      var start = 0.2 + i * 0.08;
+      var bp = Math.max(0, Math.min(1, (p - start) / 0.15));
+      var bl = parseFloat(b.style.strokeDasharray);
+      b.style.strokeDashoffset = bl * (1 - bp);
+    });
+    // leaves bloom 0.5 -> 1.0
+    leaves.forEach(function(lf, i) {
+      var start = 0.45 + (i % 12) * 0.02;
+      var lp = Math.max(0, Math.min(1, (p - start) / 0.25));
+      lf.style.opacity = lp;
+      lf.style.transform = 'scale(' + (0.3 + 0.7 * lp) + ')';
+    });
+  }
+  updateTree();
+})();
+</script>
 
 </body>
 </html>
