@@ -462,6 +462,46 @@
   }
   .story-text p + p { margin-top: 1.25rem; }
 
+  /* PRICING-TRANSPARENCY STRIP (preempts the #1 objection) */
+  .promise { background: var(--cream); padding: 5rem 0 3rem; }
+  .promise-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .promise-card {
+    background: linear-gradient(160deg, var(--cream-warm) 0%, var(--cream) 100%);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem 1.75rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    position: relative; overflow: hidden;
+  }
+  .promise-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 42px -20px rgba(30, 58, 43, 0.2);
+  }
+  .promise-step {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--forest); color: var(--cream);
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem; font-weight: 600;
+  }
+  .promise-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.25rem; letter-spacing: -0.015em;
+    color: var(--forest-deep); font-weight: 500;
+  }
+  .promise-desc {
+    font-size: 0.92rem; line-height: 1.55;
+    color: var(--charcoal); opacity: 0.78;
+  }
+  @media (max-width: 900px) {
+    .promise-grid { grid-template-columns: 1fr; }
+  }
+
   /* GALLERY */
   .gallery { padding: 7rem 0; background: var(--cream-warm); position: relative; overflow: hidden; }
   .gallery .section-header { text-align: center; grid-template-columns: 1fr; max-width: 720px; margin: 0 auto 3.5rem; }
@@ -1006,6 +1046,28 @@
       <div class="trust-item">
         <div class="trust-num">BBB<span class="trust-num-sup">★</span></div>
         <div class="trust-label">Accredited · Licensed · Insured</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="promise">
+  <div class="container">
+    <div class="promise-grid">
+      <div class="promise-card reveal">
+        <div class="promise-step">1</div>
+        <div class="promise-title">Text us a photo of your tree.</div>
+        <p class="promise-desc">No form to fill. No call-center hold music. Just snap a picture and send it — Frank sees it on his phone within minutes.</p>
+      </div>
+      <div class="promise-card reveal">
+        <div class="promise-step">2</div>
+        <div class="promise-title">Get a flat quote — same day.</div>
+        <p class="promise-desc">Written quote back in under 2 hours during business days. One number. No hourly surprises, no "while we're here" add-ons.</p>
+      </div>
+      <div class="promise-card reveal">
+        <div class="promise-step">3</div>
+        <div class="promise-title">Clean job, usually this week.</div>
+        <p class="promise-desc">Most work scheduled within 5 business days. Yard left cleaner than we found it — every branch and chip hauled off.</p>
       </div>
     </div>
   </div>
