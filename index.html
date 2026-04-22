@@ -36,15 +36,26 @@
 
   /* NAV */
   nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(250, 246, 238, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease,
+                border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  nav.is-scrolled {
+    background: rgba(250, 246, 238, 0.78);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom-color: var(--border);
+    box-shadow: 0 4px 24px -12px rgba(30, 58, 43, 0.15);
   }
   .nav-inner {
     display: flex; align-items: center; justify-content: space-between;
     padding: 1.25rem 2rem; max-width: 1280px; margin: 0 auto;
+    transition: padding 0.35s ease;
   }
+  nav.is-scrolled .nav-inner { padding-top: 0.9rem; padding-bottom: 0.9rem; }
+  body { padding-top: 5rem; }
   .logo {
     font-family: 'Fraunces', serif;
     font-size: 1.35rem;
@@ -74,9 +85,28 @@
 
   /* HERO */
   .hero {
-    padding: 4rem 0 6rem;
+    padding: 2rem 0 6rem;
     position: relative;
     overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -10%; right: -10%;
+    width: 70vw; height: 120%;
+    background-image: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1600&q=70');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.14;
+    filter: saturate(120%) hue-rotate(-8deg);
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(ellipse at 70% 40%, black 25%, transparent 75%);
+    mask-image: radial-gradient(ellipse at 70% 40%, black 25%, transparent 75%);
+    z-index: 0;
+  }
+  .hero .container { position: relative; z-index: 1; }
+  @media (max-width: 900px) {
+    .hero::before { width: 120vw; right: -60%; opacity: 0.1; }
   }
   .hero-grid {
     display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: center;
@@ -129,6 +159,55 @@
   }
   .btn-secondary:hover { background: var(--forest); color: var(--cream); }
   .btn svg { width: 16px; height: 16px; }
+  .btn-text {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: var(--forest); text-decoration: none; font-size: 0.92rem;
+    font-weight: 500; padding: 0.75rem 0.25rem;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-text svg { width: 15px; height: 15px; opacity: 0.8; }
+  .btn-text:hover { color: var(--terracotta); border-bottom-color: var(--terracotta); }
+
+  /* Border-beam glow on primary CTA */
+  .btn-beam { position: relative; overflow: hidden; isolation: isolate; }
+  .btn-beam::before {
+    content: ''; position: absolute; inset: -2px;
+    background: conic-gradient(from 0deg, transparent, rgba(250,246,238,0.8), transparent 30%);
+    animation: beam 4s linear infinite;
+    z-index: -1;
+    border-radius: 100px;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-beam::after {
+    content: ''; position: absolute; inset: 2px;
+    background: var(--terracotta); border-radius: 100px; z-index: -1;
+    transition: background 0.2s;
+  }
+  .btn-beam:hover::before { opacity: 1; }
+  .btn-beam:hover::after { background: var(--terracotta-deep); }
+  @keyframes beam { to { transform: rotate(360deg); } }
+
+  /* Hero trust chips */
+  .hero-trust-chips {
+    display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin-top: 2rem;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    background: rgba(30, 58, 43, 0.06);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.82rem; font-weight: 500;
+    color: var(--forest-deep);
+  }
+  .chip-stars { color: #e6a83a; letter-spacing: 1px; font-size: 0.78rem; }
+  .chip-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--terracotta);
+    box-shadow: 0 0 0 3px rgba(201, 87, 46, 0.15);
+  }
 
   .hero-visual {
     position: relative;
@@ -226,6 +305,11 @@
     font-size: 3rem; font-weight: 500; letter-spacing: -0.03em;
     color: var(--terracotta);
     line-height: 1;
+  }
+  .trust-num-sup {
+    font-size: 1.2rem; vertical-align: super;
+    margin-left: 0.15rem; opacity: 0.85;
+    font-weight: 400;
   }
   .trust-label {
     font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -363,6 +447,88 @@
   }
   .story-text p + p { margin-top: 1.25rem; }
 
+  /* PROOF / TESTIMONIAL GRID */
+  .proof { padding: 7rem 0; background: var(--cream); }
+  .proof-header { text-align: center; margin-bottom: 4rem; }
+  .proof-header .section-eyebrow { display: inline-block; }
+  .proof-header .section-title { max-width: 720px; margin: 0 auto; }
+  .proof-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-bottom: 3rem;
+  }
+  .proof-card {
+    background: var(--cream-warm);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex; flex-direction: column; gap: 1.25rem;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    position: relative; overflow: hidden;
+  }
+  .proof-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -20px rgba(30, 58, 43, 0.2);
+    border-color: rgba(201, 87, 46, 0.3);
+  }
+  .proof-card-feature {
+    background: linear-gradient(135deg, #faf6ee 0%, #f2ebd9 100%);
+    border-color: rgba(201, 87, 46, 0.25);
+    box-shadow: 0 16px 40px -16px rgba(201, 87, 46, 0.2);
+  }
+  .proof-card-feature::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201, 87, 46, 0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .proof-stars {
+    color: #e6a83a; letter-spacing: 3px; font-size: 1rem;
+  }
+  .proof-quote {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem; line-height: 1.45;
+    color: var(--forest-deep);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    flex: 1;
+  }
+  .proof-meta {
+    display: flex; align-items: center; gap: 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .proof-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    color: var(--cream); font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; font-family: 'Fraunces', serif;
+    flex-shrink: 0;
+  }
+  .proof-name { font-weight: 600; font-size: 0.92rem; color: var(--forest-deep); }
+  .proof-source { font-size: 0.78rem; color: var(--olive); margin-top: 0.1rem; }
+  .proof-footer {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 2rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .proof-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-size: 0.9rem; font-weight: 500;
+    color: var(--forest-deep); opacity: 0.85;
+  }
+  .proof-badge svg { stroke: var(--forest); }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
   /* SERVICE AREAS */
   .areas { padding: 6rem 0; background: var(--cream-warm); }
   .areas-inner {
@@ -498,6 +664,41 @@
     font-size: 0.8rem; opacity: 0.6;
   }
 
+  /* SCROLL TREE (signature scroll animation) */
+  #scroll-tree {
+    position: fixed;
+    top: 0; right: 0;
+    width: 14vw; max-width: 220px; min-width: 140px;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.5;
+  }
+  #scroll-tree svg { width: 100%; height: 100%; overflow: visible; }
+  #scroll-tree .trunk, #scroll-tree .branch {
+    fill: none; stroke: var(--forest);
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  #scroll-tree .trunk { stroke-width: 7; }
+  #scroll-tree .branch { stroke-width: 2.8; opacity: 0.85; }
+  #scroll-tree .leaf {
+    transform-origin: center;
+    transform-box: fill-box;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  #scroll-tree .leaf-terra { fill: var(--terracotta); }
+  #scroll-tree .leaf-olive { fill: var(--olive); }
+  #scroll-tree .leaf-forest { fill: var(--forest); }
+  @media (max-width: 900px) {
+    #scroll-tree { width: 80px; min-width: 60px; opacity: 0.28; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #scroll-tree { opacity: 0.18; }
+    #scroll-tree .trunk, #scroll-tree .branch { stroke-dasharray: none !important; stroke-dashoffset: 0 !important; }
+    #scroll-tree .leaf { opacity: 0.8; transform: none; }
+  }
+
   /* MOCKUP BANNER */
   .mockup-banner {
     position: fixed;
@@ -514,21 +715,67 @@
   }
   .mockup-banner::before { content: '👁'; }
 
+  /* STICKY MOBILE CTA BAR */
+  .mobile-cta {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 90;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: rgba(250, 246, 238, 0.92);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -8px 24px -12px rgba(30, 58, 43, 0.15);
+    gap: 0.6rem;
+  }
+  .mobile-cta a {
+    flex: 1; display: inline-flex; align-items: center; justify-content: center;
+    gap: 0.5rem; padding: 0.85rem 0.5rem;
+    border-radius: 100px; text-decoration: none;
+    font-weight: 600; font-size: 0.92rem;
+  }
+  .mobile-cta .mcta-primary { background: var(--terracotta); color: var(--cream); }
+  .mobile-cta .mcta-secondary {
+    background: transparent; color: var(--forest);
+    border: 1.5px solid var(--forest);
+  }
+  .mobile-cta svg { width: 16px; height: 16px; }
+
   /* RESPONSIVE */
   @media (max-width: 900px) {
+    body { padding-top: 4rem; }
+    .hero { padding-top: 1rem; }
     .hero-grid, .section-header, .story-grid, .areas-inner, .cta-inner, .footer-grid {
       grid-template-columns: 1fr; gap: 2.5rem;
     }
-    .hero-visual { height: 440px; }
+    .hero h1 { font-size: clamp(2.4rem, 11vw, 3.6rem); }
+    .hero-visual { height: 380px; }
+    .hero-trust-chips { gap: 0.45rem; }
+    .chip { font-size: 0.76rem; padding: 0.4rem 0.75rem; }
     .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .trust-num { font-size: 2.25rem; }
     .service-grid { grid-template-columns: 1fr; }
+    .proof-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    .proof-footer { flex-direction: column; gap: 1rem; align-items: flex-start; }
     .areas-list { grid-template-columns: repeat(2, 1fr); }
-    .cta-inner { padding: 3rem 2rem; }
-    .nav-links { display: none; }
-    .nav-links .nav-cta { display: inline-flex; }
-    .nav-links { display: flex; }
+    .cta-inner { padding: 3rem 1.5rem; }
+    .cta-form { padding: 1.75rem; }
     .nav-links a:not(.nav-cta) { display: none; }
+    .nav-links { gap: 0; }
+    .nav-cta { padding: 0.55rem 1rem !important; font-size: 0.8rem !important; }
     .container { padding: 0 1.25rem; }
+    .mobile-cta { display: flex; }
+    /* Leave room for sticky CTA bar */
+    footer { padding-bottom: 6rem; }
+    .mockup-banner { bottom: 80px; }
+  }
+  @media (max-width: 520px) {
+    .hero-cta-row { flex-direction: column; align-items: stretch; }
+    .hero-cta-row .btn { justify-content: center; }
+    .btn-text { justify-content: center; padding: 0.5rem; }
+    .trust-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .areas-list { grid-template-columns: 1fr 1fr; }
+    .form-row { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -549,22 +796,70 @@
   </div>
 </nav>
 
+<div id="scroll-tree" aria-hidden="true">
+  <svg viewBox="0 0 200 1000" preserveAspectRatio="xMidYMax meet">
+    <!-- Trunk: draws bottom -> top as you scroll -->
+    <path id="st-trunk" class="trunk"
+      d="M100 1000 C 98 900 102 820 100 740 S 96 640 100 560 C 104 480 96 420 100 340 S 98 240 100 160"/>
+    <!-- Branches: staggered reveal 0.25 -> 0.7 -->
+    <path class="branch" d="M100 620 C 70 600 50 580 30 560"/>
+    <path class="branch" d="M100 560 C 130 545 155 530 175 510"/>
+    <path class="branch" d="M100 480 C 75 460 55 435 35 410"/>
+    <path class="branch" d="M100 420 C 128 405 152 385 170 360"/>
+    <path class="branch" d="M100 340 C 80 320 65 295 48 265"/>
+    <path class="branch" d="M100 290 C 125 270 148 245 164 215"/>
+    <path class="branch" d="M100 230 C 85 210 75 185 65 155"/>
+    <path class="branch" d="M100 190 C 118 170 135 145 148 115"/>
+    <path class="branch" d="M100 160 C 100 135 100 110 100 80"/>
+    <!-- Leaves: bloom 0.5 -> 1.0 -->
+    <circle class="leaf leaf-olive"   cx="26"  cy="558" r="7"/>
+    <circle class="leaf leaf-forest"  cx="36"  cy="548" r="6"/>
+    <circle class="leaf leaf-terra"   cx="22"  cy="570" r="5"/>
+    <circle class="leaf leaf-olive"   cx="179" cy="508" r="7"/>
+    <circle class="leaf leaf-forest"  cx="168" cy="498" r="6"/>
+    <circle class="leaf leaf-terra"   cx="185" cy="520" r="5"/>
+    <circle class="leaf leaf-olive"   cx="30"  cy="406" r="7"/>
+    <circle class="leaf leaf-forest"  cx="42"  cy="398" r="6"/>
+    <circle class="leaf leaf-terra"   cx="175" cy="358" r="7"/>
+    <circle class="leaf leaf-olive"   cx="162" cy="348" r="6"/>
+    <circle class="leaf leaf-terra"   cx="44"  cy="262" r="6"/>
+    <circle class="leaf leaf-forest"  cx="56"  cy="252" r="5"/>
+    <circle class="leaf leaf-olive"   cx="168" cy="212" r="6"/>
+    <circle class="leaf leaf-terra"   cx="156" cy="200" r="5"/>
+    <circle class="leaf leaf-forest"  cx="61"  cy="152" r="6"/>
+    <circle class="leaf leaf-olive"   cx="72"  cy="140" r="5"/>
+    <circle class="leaf leaf-terra"   cx="152" cy="112" r="6"/>
+    <circle class="leaf leaf-olive"   cx="140" cy="100" r="5"/>
+    <circle class="leaf leaf-forest"  cx="95"  cy="76"  r="6"/>
+    <circle class="leaf leaf-terra"   cx="108" cy="70"  r="5"/>
+    <circle class="leaf leaf-olive"   cx="100" cy="58"  r="7"/>
+    <circle class="leaf leaf-terra"   cx="88"  cy="66"  r="4"/>
+    <circle class="leaf leaf-forest"  cx="114" cy="62"  r="4"/>
+    <circle class="leaf leaf-olive"   cx="96"  cy="46"  r="5"/>
+  </svg>
+</div>
+
 <section class="hero">
   <div class="container">
     <div class="hero-grid">
-      <div>
-        <div class="hero-eyebrow">Trusted Since 2014 · Licensed & Insured</div>
-        <h1>San Antonio's<br>trusted <span class="serif italic">arborists</span><br>since 2014.</h1>
-        <p class="hero-lede">From routine trimming to emergency storm response, we handle every tree on your property with the care and precision of people who've been doing this right for a decade.</p>
+      <div class="reveal">
+        <div class="hero-eyebrow">Family-owned · Licensed · Insured · San Antonio</div>
+        <h1>That tree is<br>telling you <span class="serif italic">something.</span></h1>
+        <p class="hero-lede">Free on-site arborist visit. Same-day written quote. Most jobs done within the week — by the Ramos family crew that's been treating SA yards like their own since day one.</p>
         <div class="hero-cta-row">
-          <a href="#contact" class="btn btn-primary">
-            Get a free estimate
+          <a href="#contact" class="btn btn-primary btn-beam">
+            Get my free quote
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="tel:2108748235" class="btn btn-secondary">
+          <a href="tel:2108748235" class="btn-text">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            (210) 874-8235
+            or call (210) 874-8235
           </a>
+        </div>
+        <div class="hero-trust-chips">
+          <div class="chip"><span class="chip-stars">★★★★★</span> 26+ five-star reviews</div>
+          <div class="chip"><span class="chip-dot"></span> Free · 2-min form · No pressure</div>
+          <div class="chip"><span class="chip-dot"></span> Response in under 2 hrs</div>
         </div>
       </div>
 
@@ -611,20 +906,20 @@
   <div class="container">
     <div class="trust-grid">
       <div class="trust-item">
-        <div class="trust-num">10+</div>
-        <div class="trust-label">Years in Business</div>
+        <div class="trust-num">26<span class="trust-num-sup">+</span></div>
+        <div class="trust-label">Verified 5-Star Reviews</div>
       </div>
       <div class="trust-item">
-        <div class="trust-num">30+</div>
-        <div class="trust-label">5-Star Reviews</div>
+        <div class="trust-num">2<span class="trust-num-sup">hr</span></div>
+        <div class="trust-label">Quote Response Time</div>
       </div>
       <div class="trust-item">
-        <div class="trust-num">48hr</div>
-        <div class="trust-label">Emergency Response</div>
+        <div class="trust-num">24<span class="trust-num-sup">/7</span></div>
+        <div class="trust-label">Storm Emergency Line</div>
       </div>
       <div class="trust-item">
-        <div class="trust-num">100%</div>
-        <div class="trust-label">Licensed & Insured</div>
+        <div class="trust-num">BBB<span class="trust-num-sup">★</span></div>
+        <div class="trust-label">Accredited · Licensed · Insured</div>
       </div>
     </div>
   </div>
@@ -735,22 +1030,80 @@
         <div class="story-visual-quote">"</div>
         <div>
           <p style="font-family: 'Fraunces', serif; font-size: 1.5rem; font-style: italic; line-height: 1.35; margin-bottom: 2rem;">
-            These guys came out the same day I called, gave me a fair quote, and had a 40-foot oak down and the stump ground out by Tuesday. Best tree service I've dealt with in 20 years of homeownership.
+            Lightning struck my huge backyard tree on August 31st. Ramos Tree Service did a great job of removing the tree and grinding the stump. Definitely recommend them.
           </p>
           <div class="story-visual-caption">
-            <div class="story-visual-name">David M.</div>
-            <div class="story-visual-role">Alamo Heights · Verified Google Review</div>
+            <div class="story-visual-name">F. Vacek</div>
+            <div class="story-visual-role">San Antonio · Verified Google Review</div>
           </div>
         </div>
       </div>
 
       <div class="story-content">
         <div class="section-eyebrow">Our Story</div>
-        <h2 class="section-title">Ten years of taking tree work <span class="serif italic">seriously.</span></h2>
+        <h2 class="section-title">Frank Ramos runs the saw, and signs <span class="serif italic">every job.</span></h2>
         <div class="story-text">
-          <p>Ramos Tree Service started with a single truck, a chainsaw, and a belief that tree work in San Antonio was being done poorly by companies that cut corners.</p>
-          <p>A decade later, we've become the go-to crew for homeowners across Alamo Heights, Stone Oak, Terrell Hills, and the greater SA area — because we still show up on time, still do the job right, and still treat your yard like it's our own.</p>
+          <p>Ramos Tree Service is family-owned and operated out of San Antonio. Frank Ramos Jr. answers the phone, walks your property, writes the quote, and rolls the truck — no subcontractors, no middlemen, no surprises on the invoice.</p>
+          <p>That's why the crew has a perfect 5.0 rating across 26+ verified reviews, BBB accreditation, and a growing list of repeat customers across Alamo Heights, Stone Oak, Terrell Hills, and the rest of Bexar County.</p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="proof">
+  <div class="container">
+    <div class="proof-header reveal">
+      <div class="section-eyebrow">What Neighbors Are Saying</div>
+      <h2 class="section-title">5.0 across <span class="serif italic">26+ reviews.</span></h2>
+    </div>
+    <div class="proof-grid">
+      <article class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Professionalism and excellent customer care is what you can expect from Mr. Ramos Tree Service."</p>
+        <div class="proof-meta">
+          <div class="proof-avatar" style="background: #8b4513;">W</div>
+          <div>
+            <div class="proof-name">William Taylor</div>
+            <div class="proof-source">Google Review</div>
+          </div>
+        </div>
+      </article>
+      <article class="proof-card proof-card-feature reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Lightning struck my huge backyard tree. Ramos Tree Service did a great job of removing the tree and grinding the stump. Definitely recommend them."</p>
+        <div class="proof-meta">
+          <div class="proof-avatar" style="background: var(--terracotta);">F</div>
+          <div>
+            <div class="proof-name">F. Vacek</div>
+            <div class="proof-source">Google Review · Emergency removal</div>
+          </div>
+        </div>
+      </article>
+      <article class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <p class="proof-quote">"Highly recommended — did a fantastic job and very respectful."</p>
+        <div class="proof-meta">
+          <div class="proof-avatar" style="background: var(--olive);">A</div>
+          <div>
+            <div class="proof-name">Adam Hernandez</div>
+            <div class="proof-source">Google Review</div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="proof-footer reveal">
+      <div class="proof-badge">
+        <svg viewBox="0 0 24 24" fill="#4285F4" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <span>5.0 on Google</span>
+      </div>
+      <div class="proof-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6l-9-4z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>BBB Accredited</span>
+      </div>
+      <div class="proof-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>
+        <span>Licensed · Insured · Bonded</span>
       </div>
     </div>
   </div>
@@ -858,7 +1211,83 @@
   </div>
 </footer>
 
+<div class="mobile-cta" aria-label="Quick contact">
+  <a href="tel:2108748235" class="mcta-secondary">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Call
+  </a>
+  <a href="#contact" class="mcta-primary">
+    Get free quote
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+</div>
+
 <div class="mockup-banner">Preview mockup · Digital AI Ads</div>
+
+<script>
+(function() {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Glass-blur nav on scroll
+  var nav = document.querySelector('nav');
+  function onScroll() {
+    if (window.scrollY > 12) nav.classList.add('is-scrolled');
+    else nav.classList.remove('is-scrolled');
+    updateTree();
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // IntersectionObserver scroll reveals
+  if ('IntersectionObserver' in window && !reduce) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e, i) {
+        if (e.isIntersecting) {
+          setTimeout(function(){ e.target.classList.add('is-visible'); }, i * 80);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  // Scroll-driven tree growth
+  var trunk = document.getElementById('st-trunk');
+  var branches = document.querySelectorAll('#scroll-tree .branch');
+  var leaves = document.querySelectorAll('#scroll-tree .leaf');
+  var trunkLen = trunk ? trunk.getTotalLength() : 0;
+  if (trunk) { trunk.style.strokeDasharray = trunkLen; trunk.style.strokeDashoffset = trunkLen; }
+  branches.forEach(function(b){
+    var l = b.getTotalLength();
+    b.style.strokeDasharray = l; b.style.strokeDashoffset = l;
+  });
+  function updateTree() {
+    if (!trunk || reduce) return;
+    var doc = document.documentElement;
+    var max = doc.scrollHeight - window.innerHeight;
+    var p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+    // trunk draws 0 -> 0.35
+    var tp = Math.min(1, p / 0.35);
+    trunk.style.strokeDashoffset = trunkLen * (1 - tp);
+    // branches draw 0.25 -> 0.7 staggered
+    branches.forEach(function(b, i) {
+      var start = 0.2 + i * 0.08;
+      var bp = Math.max(0, Math.min(1, (p - start) / 0.15));
+      var bl = parseFloat(b.style.strokeDasharray);
+      b.style.strokeDashoffset = bl * (1 - bp);
+    });
+    // leaves bloom 0.5 -> 1.0
+    leaves.forEach(function(lf, i) {
+      var start = 0.45 + (i % 12) * 0.02;
+      var lp = Math.max(0, Math.min(1, (p - start) / 0.25));
+      lf.style.opacity = lp;
+      lf.style.transform = 'scale(' + (0.3 + 0.7 * lp) + ')';
+    });
+  }
+  updateTree();
+})();
+</script>
 
 </body>
 </html>
